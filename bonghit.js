@@ -11,7 +11,13 @@
 //   !bonghit  - Take a hit!
 //
 
-const BONGTIME = 10
+const BONG_TIME = [10, 5, 3]
+const BONG_PHRASE = [
+  "Bonghit",
+  "Fly high",
+  "Suck it like a wang",
+  "Puff puff"
+]
 
 function startBongHit(msg, secs) {
   msg.send("(-_-)")
@@ -27,12 +33,12 @@ function bongCount(msg, secs) {
     return
   }
 
-  msg.send("bonghit!")
+  msg.send(msg.random(BONG_PHRASE) + "!")
 }
 
 module.exports = function (robot) {
   robot.hear(/!bonghit/i, function (msg) {
-    secs = BONGTIME
+    secs = msg.random(BONG_TIME)
     startBongHit(msg, secs)
   });
 }
