@@ -7,7 +7,7 @@
 // Configuration:
 //   HUBOT_WEATHER_API_URL
 //   HUBOT_WEATHER_UNITS
-//   HUBOT_WEATHER_API_KEY
+//   RAPIDAPI_KEY
 //
 // Commands:
 //   !weather <city>  - Look up the temperature and humidity for the city
@@ -19,8 +19,8 @@ process.env.HUBOT_WEATHER_API_URL = (process.env.HUBOT_WEATHER_API_URL != null) 
 process.env.HUBOT_WEATHER_UNITS = (process.env.HUBOT_WEATHER_UNITS != null) ?
   process.env.HUBOT_WEATHER_UNITS : 'imperial'
 
-process.env.HUBOT_WEATHER_API_KEY = (process.env.HUBOT_WEATHER_API_KEY != null) ?
-  process.env.HUBOT_WEATHER_API_KEY : ''
+process.env.RAPIDAPI_KEY = (process.env.RAPIDAPI_KEY != null) ?
+  process.env.RAPIDAPI_KEY : ''
 
 function get_emote_for_code(code) {
 
@@ -57,7 +57,7 @@ function fetch_weather(robot, msg, query) {
   new Promise((resolve, reject) =>
       robot.http(url)
       .header('x-rapidapi-host', 'community-open-weather-map.p.rapidapi.com')
-      .header('X-RapidAPI-Key', process.env.HUBOT_WEATHER_API_KEY)
+      .header('X-RapidAPI-Key', process.env.RAPIDAPI_KEY)
       .query(query)
       .get()((err, response, body) => {
         if (err != null) {
@@ -103,6 +103,8 @@ function fetch_weather_byzip(robot, msg, zipCode) {
 
 module.exports = function (robot) {
   robot.hear(/!weather (.*)/i, function (msg) {
+    msg.finish();
+
     const match = msg.match[1].trim();
     console.log(match)
     const zip_regex = /^\d{5}$/;

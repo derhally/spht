@@ -37,7 +37,7 @@ function bongCount(msg, secs) {
 }
 
 module.exports = function (robot) {
-  robot.hear(/!bonghit/i, function (msg) {
+  robot.hear(/!bonghit$/i, function (msg) {
     secs = msg.random(BONG_TIME)
     startBongHit(msg, secs)
   });
