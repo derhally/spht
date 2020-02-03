@@ -12,7 +12,7 @@ ENV BOT_OWNER "Marathon"
 ENV BOT_DESC "Hubot with rocketbot adapter"
 ENV ROCKETCHAT_USESSL=true
 
-ENV EXTERNAL_SCRIPTS=hubot-diagnostics,hubot-help,hubot-giphy-gifme,hubot-humanity
+ENV EXTERNAL_SCRIPTS=hubot-diagnostics,hubot-help,hubot-giphy-gifme,hubot-humanity,hubot-azure-brain
 
 RUN yo hubot --owner="$BOT_OWNER" --name="$BOT_NAME" --description="$BOT_DESC" --defaults && \
     sed -i /heroku/d ./external-scripts.json && \
