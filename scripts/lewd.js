@@ -21,7 +21,6 @@ const RESPONSES = [
 
 module.exports = function (robot) {
   robot.hear(/(boob(s?|ies?)|tit(s?)|tata(s?)|bazongas)/i, function (msg) {
-    msg.finish();
     const phrase = msg.random(RESPONSES)
     response = phrase.replace(/<u>/g, () => msg.message.user.name)
 
