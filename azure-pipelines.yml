@@ -3,14 +3,14 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
 
 trigger:
-- master
+- '*'
 
 resources:
 - repo: self
 
 variables:
   tag: '$(Build.BuildId)'
-  buildAndPush: $[startsWith(variables['Build.SourceBranch'], 'refs/tags/')]
+  buildAndPush: $[startsWith(variables['Build.SourceBranchName'], 'master')]
   imageRepository: "derhally/spht-bot"
   dockerRegistryServiceConnection: "docker_hub"
 
@@ -23,19 +23,6 @@ stages:
     pool:
       vmImage: 'ubuntu-latest'
     steps:
-    - bash: |
-        tag_value=$(git describe --tags --abbrev=0)
-        rc=$?
-        if [[ $rc != 0 ]]; then
-          echo "No tag found"
-        else
-          # remove v prefix
-          tag_value=$(echo $tag_value | sed -e "s/^v//")
-          echo "tag: $tag_value"
-          echo "##vso[task.setvariable variable=tag]$tag_value"
-        fi
-      condition: eq(variables['buildAndPush'], 'true')
-      displayName: "Get Tag"
     - task: Docker@2
       displayName: Build Image
       inputs:
