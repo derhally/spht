@@ -72,7 +72,7 @@ describe('weather', function () {
                 ['bob', '!weather 20007'],
                 ['bob', '!forecast 20007'],
                 ['bob', '!forecast 20007 3'],
-                ["hubot", "It is currently 41f and feels like 33f in Washington!\n   :cloud_rain: Light rain\n   Humidity: 64%\n   Lows 37f High 44f"],
+                ["hubot", "It is currently 41f and feels like 33f in Washington!\n    :cloud_rain: Light rain\n    Humidity: 64%\n    Low 37f High 44f"],
                 ["hubot", "3 day forecast for Washington:\n   2\\8: Low: 3 High: 8 Humidity: 35%\n   2\\9: Low: 1 High: 9 Humidity: 39%\n   2\\10: Low: 7 High: 10 Humidity: 79%"],
                 ["hubot", "3 day forecast for Washington:\n   2\\8: Low: 3 High: 8 Humidity: 35%\n   2\\9: Low: 1 High: 9 Humidity: 39%\n   2\\10: Low: 7 High: 10 Humidity: 79%"]
             ]);
@@ -92,7 +92,7 @@ describe('weather', function () {
                 ['bob', '!weather washington'],
                 ['bob', '!forecast washington'],
                 ['bob', '!forecast washington 3'],
-                ["hubot", "It is currently 41f and feels like 33f in Washington!\n   :cloud_rain: Light rain\n   Humidity: 64%\n   Lows 37f High 44f"],
+                ["hubot", "It is currently 41f and feels like 33f in Washington!\n    :cloud_rain: Light rain\n    Humidity: 64%\n    Low 37f High 44f"],
                 ["hubot", "3 day forecast for Washington:\n   2\\8: Low: 3 High: 8 Humidity: 35%\n   2\\9: Low: 1 High: 9 Humidity: 39%\n   2\\10: Low: 7 High: 10 Humidity: 79%"],
                 ["hubot", "3 day forecast for Washington:\n   2\\8: Low: 3 High: 8 Humidity: 35%\n   2\\9: Low: 1 High: 9 Humidity: 39%\n   2\\10: Low: 7 High: 10 Humidity: 79%"]
             ]);

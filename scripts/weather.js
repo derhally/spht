@@ -26,7 +26,6 @@ process.env.HUBOT_WEATHER_UNITS = (process.env.HUBOT_WEATHER_UNITS != null) ?
 process.env.RAPIDAPI_KEY = (process.env.RAPIDAPI_KEY != null) ?
   process.env.RAPIDAPI_KEY : ''
 
-const WeatherUserPrefKey = "default_weather_loc_";
 const DefaultForecastDays = 3;
 
 module.exports = function (robot) {
@@ -108,9 +107,9 @@ module.exports = function (robot) {
 
   function renderCurrent(res, json) {
     m = `It is currently ${Math.round(json.main.temp)}f and feels like ${Math.round(json.main.feels_like)}f in ${json.name}!`
-    m += "\n   " + `${get_emote_for_code(json.weather[0].id)} ${getDescription(json.weather[0])}`
-    m += "\n   " + `Humidity: ${json.main.humidity}%`;
-    m += "\n   " + `Lows ${Math.round(json.main.temp_min)}f High ${Math.round(json.main.temp_max)}f`
+    m += "\n    " + `${get_emote_for_code(json.weather[0].id)} ${getDescription(json.weather[0])}`
+    m += "\n    " + `Humidity: ${json.main.humidity}%`;
+    m += "\n    " + `Low ${Math.round(json.main.temp_min)}f High ${Math.round(json.main.temp_max)}f`
     res.send(m)
   }
 
@@ -159,6 +158,35 @@ module.exports = function (robot) {
   ///////////////
   // LISTENERS //
   ///////////////
+  robot.hear(/!set my weather location to (.*)$/i, function (res) {
+    res.finish();
+    location = res.match[1].trim();
+    const userSettings = Settings.forUser(robot, res.message.user.id);
+    setUserPreferredLocation(userSettings, location);
+    res.send(`I've saved it ${res.message.user.name}.`)
+  });
+
+  robot.hear(/!weather$/i, function (res) {
+    res.finish();
+
+    const userSettings = Settings.forUser(robot, res.message.user.id);
+    var userPrefLocation = getUserPreferredLocation(userSettings)
+    if (userPrefLocation) {
+      handleRequest(robot, res, userPrefLocation, 0);
+      return;
+    }
+
+    res.send(`${res.message.user.name}, I don't know your default weatherlocation.  Please set it using 'set my weather location to' command`);
+  });
+
+  robot.hear(/!forecast$/i, function (res) {
+    res.finish();
+
+    const userSettings = Settings.forUser(robot, res.message.user.id);
+    var userPrefLocation = getUserPreferredLocation(userSettings)
+    handleRequest(robot, res, userPrefLocation, DefaultForecastDays);
+  });
+
   robot.hear(/!weather (.*)/i, function (res) {
     res.finish();
 
@@ -179,34 +207,5 @@ module.exports = function (robot) {
     }
 
     handleRequest(robot, res, location, days);
-  });
-
-  robot.hear(/!set my weather location to (.*)$/i, function (res) {
-    res.finish();
-    location = res.match[1].trim();
-    const userSettings = Settings.forUser(robot, res.message.user.id);
-    setUserPreferredLocation(userSettings, location);
-    res.send(`I've saved it ${rs.message.user.name}.`)
-  });
-
-  robot.hear(/!weather$/i, function (res) {
-    res.finish();
-
-    const userSettings = Settings.forUser(robot, res.message.user.id);
-    var userPrefLocation = getUserPreferredLocation(userSettings)
-    if (userPrefLocation) {
-      handleRequest(robot, res, userPrefLocation, 0);
-      return;
-    }
-
-    res.send(`${res.message.user.name}, I don't know your default location.  Please set it using 'set my weather location to' command`);
-  });
-
-  robot.hear(/!forecast$/i, function (res) {
-    res.finish();
-
-    const userSettings = Settings.forUser(robot, res.message.user.id);
-    var userPrefLocation = getUserPreferredLocation(userSettings)
-    handleRequest(robot, res, userPrefLocation, DefaultForecastDays);
   });
 }
