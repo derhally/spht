@@ -10,6 +10,8 @@
 // Commands:
 //
 
+const UserStore = require('./lib/userStore.js')
+
 words = [
     'anal',
     'arse',
@@ -52,12 +54,27 @@ words = [
     'wankers'
 ]
 
-const phrase = '*{user}* have been fined one credit for a violation of the verbal morality statute.';
+const phrase = '*{user}* have been fined one credit for a violation of the verbal morality statute.\n Your profanity has cost you *{credit}* credits up to this point.';
 
 regex = new RegExp('(?:^|\\s)(' + words.join('|') + ')(?:\\s|\\.|\\?|!|$)', 'i');
 
 module.exports = function (robot) {
-    robot.hear(regex, function (msg) {
-        msg.send(phrase.replace(/{user}/, msg.message.user.name));
+
+    function incrementCredits(userData, amount = 1) {
+        let current = userData.profanity_debt || 0;
+        userData.profanity_debt = current + amount;
+        return userData.profanity_debt;
+    }
+
+    ///////////////
+    // LISTENERS //
+    ///////////////
+    robot.hear(regex, function (res) {
+        let userData = UserStore.forUser(robot, res.message.user.id);
+        let currentDebt = incrementCredits(userData);
+
+        let response = phrase.replace(/{user}/, res.message.user.name)
+            .replace(/{credit}/, currentDebt);
+        res.send(response);
     });
 }

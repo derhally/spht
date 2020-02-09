@@ -15,7 +15,7 @@
 //   !set my weather location to <city>|<zip> - Set the default location for weather commands
 //
 
-const Settings = require('./lib/settings.js')
+const UserStore = require('./lib/userStore.js')
 
 process.env.HUBOT_WEATHER_API_URL = (process.env.HUBOT_WEATHER_API_URL != null) ?
   process.env.HUBOT_WEATHER_API_URL : 'https://community-open-weather-map.p.rapidapi.com'
@@ -85,7 +85,6 @@ module.exports = function (robot) {
       )
       //parse to js object
       .then(body => {
-        console.log(body)
         return JSON.parse(body)
       })
       .then(json => isForecast ? renderForecast(res, json) : renderCurrent(res, json))
@@ -161,7 +160,7 @@ module.exports = function (robot) {
   robot.hear(/!set my weather location to (.*)$/i, function (res) {
     res.finish();
     location = res.match[1].trim();
-    const userSettings = Settings.forUser(robot, res.message.user.id);
+    const userSettings = UserStore.forUser(robot, res.message.user.id);
     setUserPreferredLocation(userSettings, location);
     res.send(`I've saved it ${res.message.user.name}.`)
   });
@@ -169,7 +168,7 @@ module.exports = function (robot) {
   robot.hear(/!weather$/i, function (res) {
     res.finish();
 
-    const userSettings = Settings.forUser(robot, res.message.user.id);
+    const userSettings = UserStore.forUser(robot, res.message.user.id);
     var userPrefLocation = getUserPreferredLocation(userSettings)
     if (userPrefLocation) {
       handleRequest(robot, res, userPrefLocation, 0);
@@ -182,7 +181,7 @@ module.exports = function (robot) {
   robot.hear(/!forecast$/i, function (res) {
     res.finish();
 
-    const userSettings = Settings.forUser(robot, res.message.user.id);
+    const userSettings = UserStore.forUser(robot, res.message.user.id);
     var userPrefLocation = getUserPreferredLocation(userSettings)
     handleRequest(robot, res, userPrefLocation, DefaultForecastDays);
   });

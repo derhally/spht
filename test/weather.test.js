@@ -3,7 +3,6 @@ const Helper = require('hubot-test-helper');
 // helper loads a specific script if it's a file
 const helper = new Helper('./../scripts/weather.js');
 
-const co = require('co');
 const expect = require('chai').expect;
 const nock = require('nock')
 
