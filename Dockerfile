@@ -10,9 +10,10 @@ COPY ./scripts/ /home/hubot/scripts/
 
 RUN npm install
 RUN chown -R hubot:hubot /home/hubot
-RUN chown hubot:hubot -R /home/hubot/node_modules/hubot-rocketchat
+RUN chmod +x /home/hubot/bin/hubot
 
 USER hubot
+
 ENV ROCKETCHAT_USESSL=true
 
 CMD bin/hubot -n $BOT_NAME -a rocketchat
