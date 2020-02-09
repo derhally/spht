@@ -10,7 +10,9 @@
 //   RAPIDAPI_KEY
 //
 // Commands:
-//   !weather <city>  - Look up the temperature and humidity for the city
+//   !weather <city>|<zip>  - Look up the temperature and humidity for the city
+//   !forecast <city>|<zip> [1-5]? - Get the forecast for the location and 
+//   !set my weather location to <city>|<zip> - Set the default location for weather commands
 //
 
 const Settings = require('./lib/settings.js')
@@ -28,13 +30,6 @@ const WeatherUserPrefKey = "default_weather_loc_";
 const DefaultForecastDays = 3;
 
 module.exports = function (robot) {
-  function get_weather_location_for_user(user) {
-    return robot.vault.forUser(user).get(WeatherUserPrefKey)
-  }
-
-  function get_weather_location_for_user(user, location) {
-    return robot.vault.forUser(user).get(WeatherUserPrefKey, location)
-  }
 
   function get_emote_for_code(code) {
 
@@ -187,10 +182,11 @@ module.exports = function (robot) {
   });
 
   robot.hear(/!set my weather location to (.*)$/i, function (res) {
+    res.finish();
     location = res.match[1].trim();
     const userSettings = Settings.forUser(robot, res.message.user.id);
     setUserPreferredLocation(userSettings, location);
-    msg.send(`I've saved it ${rs.message.user.name}.`)
+    res.send(`I've saved it ${rs.message.user.name}.`)
   });
 
   robot.hear(/!weather$/i, function (res) {
@@ -198,7 +194,12 @@ module.exports = function (robot) {
 
     const userSettings = Settings.forUser(robot, res.message.user.id);
     var userPrefLocation = getUserPreferredLocation(userSettings)
-    handleRequest(robot, msg, userPrefLocation, 0);
+    if (userPrefLocation) {
+      handleRequest(robot, msg, userPrefLocation, 0);
+      return;
+    }
+
+    res.send(`${res.message.user.name}, I don't know your default location.  Please set it using 'set my weather location to' command`);
   });
 
   robot.hear(/!forecast$/i, function (res) {
