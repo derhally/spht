@@ -72,11 +72,11 @@ describe('profanity', function () {
             columns: {
                 0: {
                     alignment: 'left',
-                    width: 10
+                    width: 12
                 },
                 1: {
                     alignment: 'right',
-                    width: 5
+                    width: 7
                 },
             }
         }
