@@ -10,6 +10,10 @@
 // Commands:
 //
 
+const {
+    table
+} = require('table');
+
 const UserStore = require('./lib/userStore.js')
 
 words = [
@@ -69,6 +73,31 @@ module.exports = function (robot) {
         return userData.profanity_debt;
     }
 
+    function getUserData(userId) {
+        var userData = UserStore.forUser(robot, userId);
+        if (userData.profanity_debt)
+            return userData;
+
+        return null;
+    }
+
+    function compare(user1, user2) {
+        return user2[1] - user1[1];
+    }
+
+    table_config = {
+        columns: {
+            0: {
+                alignment: 'left',
+                width: 10
+            },
+            1: {
+                alignment: 'right',
+                width: 5
+            },
+        }
+    }
+
     ///////////////
     // LISTENERS //
     ///////////////
@@ -79,5 +108,22 @@ module.exports = function (robot) {
         let response = phrase.replace(/{user}/, res.message.user.name)
             .replace(/{credit}/, currentDebt);
         res.send(response);
+    });
+
+    robot.respond(/top offenders/i, function (res) {
+
+        offenders = []
+
+        const users = robot.brain.users();
+        for (let key of Object.keys(users)) {
+            const user = users[key];
+            var userData = getUserData(user.id);
+            if (userData == null) continue
+            offenders.push([user.name, userData.profanity_debt]);
+        }
+
+        offenders.sort(compare);
+        offenders.unshift(['Offender', 'Credits']);
+        res.send('```' + table(offenders, table_config) + '```');
     });
 }
