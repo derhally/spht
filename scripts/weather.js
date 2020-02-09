@@ -182,8 +182,13 @@ module.exports = function (robot) {
     res.finish();
 
     const userSettings = UserStore.forUser(robot, res.message.user.id);
-    var userPrefLocation = getUserPreferredLocation(userSettings)
-    handleRequest(robot, res, userPrefLocation, DefaultForecastDays);
+    var userPrefLocation = getUserPreferredLocation(userSettings);
+    if (userPrefLocation) {
+      handleRequest(robot, res, userPrefLocation, DefaultForecastDays);
+      return
+    }
+
+    res.send(`${res.message.user.name}, I don't know your default weatherlocation.  Please set it using 'set my weather location to' command`);
   });
 
   robot.hear(/!weather (.*)/i, function (res) {
