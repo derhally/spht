@@ -1,0 +1,26 @@
+{
+    "name": "hubot-testing",
+    "version": "0.1.0",
+    "author": "",
+    "description": "A starter set of tests for Github's Hubot.",
+    "scripts": {
+        "test": "mocha",
+        "autotest": "mocha test -w"
+    },
+    "dependencies": {
+        "hubot": "^2.13.0 < 2.14.0"
+    },
+    "devDependencies": {
+        "chai": "latest",
+        "co": "latest",
+        "mocha": "latest",
+        "coffee-script": "latest",
+        "semantic-release": "latest",
+        "nock": "latest",
+        "hubot-test-helper": "latest"
+    },
+    "keywords": [
+        "testing",
+        "hubot"
+    ]
+}

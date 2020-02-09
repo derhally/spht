@@ -12,13 +12,11 @@ ENV BOT_OWNER "Marathon"
 ENV BOT_DESC "Hubot with rocketbot adapter"
 ENV ROCKETCHAT_USESSL=true
 
-ENV EXTERNAL_SCRIPTS=hubot-diagnostics,hubot-help,hubot-giphy-gifme,hubot-humanity,hubot-azure-brain
+ENV EXTERNAL_SCRIPTS=hubot-rocketchat,hubot-diagnostics,hubot-help,hubot-giphy-gifme,hubot-humanity,hubot-azure-brain
 
 RUN yo hubot --owner="$BOT_OWNER" --name="$BOT_NAME" --description="$BOT_DESC" --defaults && \
-    sed -i /heroku/d ./external-scripts.json && \
-    sed -i /redis-brain/d ./external-scripts.json && \
-    npm install hubot-scripts && \
-    npm install hubot-rocketchat
+    node -e "console.log(JSON.stringify('$EXTERNAL_SCRIPTS'.split(',')))" > external-scripts.json && \
+    npm install $(node -e "console.log('$EXTERNAL_SCRIPTS'.split(',').join(' '))")
 
 RUN rm /home/hubot/scripts/example.coffee
 
@@ -31,6 +29,4 @@ RUN chown hubot:hubot -R /home/hubot/scripts
 USER hubot
 
 
-CMD node -e "console.log(JSON.stringify('$EXTERNAL_SCRIPTS'.split(',')))" > external-scripts.json && \
-    npm install $(node -e "console.log('$EXTERNAL_SCRIPTS'.split(',').join(' '))") && \
-    bin/hubot -n $BOT_NAME -a rocketchat
+CMD bin/hubot -n $BOT_NAME -a rocketchat
