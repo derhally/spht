@@ -23,7 +23,7 @@ words = [
     'asswhore',
     'asswipe',
     'bastard',
-    'bitch',
+    'bitch(es)?',
     'bj',
     'blowjob',
     'boob(ies)?',
@@ -34,7 +34,7 @@ words = [
     'damnit',
     'depp',
     'dick',
-    'douche',
+    'douche(bag)?',
     'fag',
     'fu',
     'fuck',
@@ -43,15 +43,18 @@ words = [
     'fucking',
     'ho',
     'oral',
+    'penis',
     'piss',
     'scheisse',
     'shit',
     'slut(s)?',
+    'stfu',
     'tit(s)?',
     'tosser',
     'whore',
     'wank(er)?',
-    'wankers'
+    'wankers',
+    'wtf'
 ]
 
 const phrase = '*{user}* have been fined one credit for a violation of the verbal morality statute.\n Your profanity has cost you *{credit}* credits up to this point.';
