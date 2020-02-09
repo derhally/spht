@@ -13,7 +13,7 @@
 //   !weather <city>  - Look up the temperature and humidity for the city
 //
 
-const Settings = require('../lib/settings.js')
+const Settings = require('./lib/settings.js')
 
 process.env.HUBOT_WEATHER_API_URL = (process.env.HUBOT_WEATHER_API_URL != null) ?
   process.env.HUBOT_WEATHER_API_URL : 'https://community-open-weather-map.p.rapidapi.com'
