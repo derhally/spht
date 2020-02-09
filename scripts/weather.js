@@ -60,7 +60,7 @@ module.exports = function (robot) {
     return ""
   }
 
-  function fetchWeather(robot, msg, query) {
+  function fetchWeather(robot, res, query) {
 
     const isForecast = (typeof query.cnt === 'undefined') ? false : true;
 
@@ -89,32 +89,32 @@ module.exports = function (robot) {
         console.log(body)
         return JSON.parse(body)
       })
-      .then(json => isForecast ? renderForecast(msg, json) : renderCurrent(msg, json))
-      .catch(err => msg.reply('Cannot compute: ' + err));
+      .then(json => isForecast ? renderForecast(res, json) : renderCurrent(res, json))
+      .catch(err => res.reply('Cannot compute: ' + err));
   }
 
   function getDescription(weather) {
     return weather.description.charAt(0).toUpperCase() + weather.description.slice(1);
   }
 
-  function renderForecast(msg, json) {
+  function renderForecast(res, json) {
     m = `${json.cnt} day forecast for ${json.city.name}:`
     json.list.forEach((value) => {
       var date = new Date(value.dt * 1000);
       m += "\n   " + `${date.getMonth()+1}\\${date.getDate()}: Low: ${Math.round(value.temp.min)} High: ${Math.round(value.temp.max)} Humidity: ${value.humidity}%`
     });
-    msg.send(m)
+    res.send(m)
   }
 
-  function renderCurrent(msg, json) {
+  function renderCurrent(res, json) {
     m = `It is currently ${Math.round(json.main.temp)}f and feels like ${Math.round(json.main.feels_like)}f in ${json.name}!`
     m += "\n   " + `${get_emote_for_code(json.weather[0].id)} ${getDescription(json.weather[0])}`
     m += "\n   " + `Humidity: ${json.main.humidity}%`;
     m += "\n   " + `Lows ${Math.round(json.main.temp_min)}f High ${Math.round(json.main.temp_max)}f`
-    msg.send(m)
+    res.send(m)
   }
 
-  function fetchWeatherByName(robot, msg, name, days) {
+  function fetchWeatherByName(robot, res, name, days) {
     query = {
       units: process.env.HUBOT_WEATHER_UNITS,
       q: name
@@ -124,10 +124,10 @@ module.exports = function (robot) {
       query.cnt = days
     }
 
-    fetchWeather(robot, msg, query);
+    fetchWeather(robot, res, query);
   }
 
-  function fetchWeatherByZip(robot, msg, zipCode, days) {
+  function fetchWeatherByZip(robot, res, zipCode, days) {
     query = {
       units: process.env.HUBOT_WEATHER_UNITS,
       zip: zipCode,
@@ -137,15 +137,15 @@ module.exports = function (robot) {
       query.cnt = days
     }
 
-    fetchWeather(robot, msg, query);
+    fetchWeather(robot, res, query);
   }
 
-  function handleRequest(robot, msg, location, days) {
+  function handleRequest(robot, res, location, days) {
     const zip_regex = /^\d{5}$/;
     if (zip_regex.test(location))
-      fetchWeatherByZip(robot, msg, location, days);
+      fetchWeatherByZip(robot, res, location, days);
     else
-      fetchWeatherByName(robot, msg, location, days);
+      fetchWeatherByName(robot, res, location, days);
   }
 
   function getUserPreferredLocation(userSettings) {
@@ -195,7 +195,7 @@ module.exports = function (robot) {
     const userSettings = Settings.forUser(robot, res.message.user.id);
     var userPrefLocation = getUserPreferredLocation(userSettings)
     if (userPrefLocation) {
-      handleRequest(robot, msg, userPrefLocation, 0);
+      handleRequest(robot, res, userPrefLocation, 0);
       return;
     }
 
@@ -207,6 +207,6 @@ module.exports = function (robot) {
 
     const userSettings = Settings.forUser(robot, res.message.user.id);
     var userPrefLocation = getUserPreferredLocation(userSettings)
-    handleRequest(robot, msg, userPrefLocation, DefaultForecastDays);
+    handleRequest(robot, res, userPrefLocation, DefaultForecastDays);
   });
 }
