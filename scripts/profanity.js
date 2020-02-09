@@ -57,7 +57,7 @@ words = [
     'wtf'
 ]
 
-const phrase = '*{user}* have been fined one credit for a violation of the verbal morality statute.\n Your profanity has cost you *{credit}* credits up to this point.';
+const phrase = '*{user}* you have been fined one credit for a violation of the verbal morality statute.\n Your profanity has cost you *{credit}* credits up to this point.';
 
 regex = new RegExp('(?:^|\\s)(' + words.join('|') + ')(?:\\s|\\.|\\?|!|$)', 'i');
 

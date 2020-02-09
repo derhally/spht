@@ -32,9 +32,9 @@ describe('profanity', function () {
         it('should reply to user', function () {
             expect(this.room.messages).to.eql([
                 ['bob', 'ass'],
-                ['hubot', '*bob* have been fined one credit for a violation of the verbal morality statute.\n Your profanity has cost you *1* credits up to this point.'],
+                ['hubot', '*bob* you have been fined one credit for a violation of the verbal morality statute.\n Your profanity has cost you *1* credits up to this point.'],
                 ['bob', 'ass'],
-                ['hubot', '*bob* have been fined one credit for a violation of the verbal morality statute.\n Your profanity has cost you *2* credits up to this point.']
+                ['hubot', '*bob* you have been fined one credit for a violation of the verbal morality statute.\n Your profanity has cost you *2* credits up to this point.']
             ]);
         });
     });
