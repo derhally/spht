@@ -12,7 +12,7 @@
 // Commands:
 //   !weather <city>|<zip>  - Look up the temperature and humidity for the city
 //   !forecast <city>|<zip> [1-5]? - Get the forecast for the location and 
-//   !set my weather location to <city>|<zip> - Set the default location for weather commands
+//   @bot set my weather location to <city>|<zip> - Set the default location for weather commands
 //
 
 const UserStore = require('./lib/userStore.js')
@@ -157,7 +157,7 @@ module.exports = function (robot) {
   ///////////////
   // LISTENERS //
   ///////////////
-  robot.hear(/!set my weather location to (.*)$/i, function (res) {
+  robot.respond(/set my weather location to (.*)$/i, function (res) {
     res.finish();
     location = res.match[1].trim();
     const userSettings = UserStore.forUser(robot, res.message.user.id);
