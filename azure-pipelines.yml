@@ -24,6 +24,7 @@ stages:
         command: 'install'
         workingDir: '$(Build.SourcesDirectory)'
     - task: Npm@1
+      displayName: Unit Tests
       inputs:
         command: 'custom'
         workingDir: '$(Build.SourcesDirectory)'
