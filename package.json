@@ -8,7 +8,8 @@
         "autotest": "mocha test -w"
     },
     "dependencies": {
-        "hubot": "^2.13.0 < 2.14.0"
+        "hubot": "^2.13.0 < 2.14.0",
+        "table": "^5.4.6"
     },
     "devDependencies": {
         "chai": "latest",
