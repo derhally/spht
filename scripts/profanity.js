@@ -21,49 +21,49 @@ words = [
     'arse',
     'ass',
     'assbagger',
-    'asshole(s)?',
+    'asshole(?:s)?',
     'asslicker',
     'assman',
     'asswhore',
     'asswipe',
     'bastard',
-    'bitch(es)?',
-    'bj',
-    'blowjob',
-    'boob(ies)?',
+    'bitch(?:es)?',
+    'bj(?:s)?',
+    'blowjob(?:s)?',
+    'boob(?:ies)?',
     'bullshit',
-    'cock',
-    'cunt',
+    'cock(?:s)?',
+    'cunt(?:s)?',
     'damn',
     'damnit',
     'depp',
     'dick',
-    'douche(bag)?',
-    'fag',
+    'douche(?:bag)?',
+    'fag(?:s)?',
     'fu',
-    'fuck',
+    'fuck(?:s)?',
     'fucked',
-    'fucker(s)?',
+    'fucker(?:s)?',
     'fucking',
     'ho',
     'oral',
-    'penis',
+    'penis(?:es)?',
     'piss',
     'scheisse',
-    'shit',
-    'slut(s)?',
+    'shit(?:s)?',
+    'slut(?:s)?',
     'stfu',
-    'tit(s)?',
+    'tit(?:s)?',
     'tosser',
-    'whore',
-    'wank(er)?',
-    'wankers',
+    'whore(?:s)?',
+    'wank(?:er)?',
+    'wanker(?:s)?',
     'wtf'
 ]
 
-const phrase = '*{user}* you have been fined one credit for a violation of the verbal morality statute.\n Your profanity has cost you *{credit}* credits up to this point.';
+const phrase = '*{user}* you have been fined {amount} credit for a violation of the verbal morality statute.\n Your profanity has cost you *{credit}* credits up to this point.';
 
-regex = new RegExp('(?:^|\\s)(' + words.join('|') + ')(?:\\s|\\.|\\?|!|$)', 'i');
+const regex = new RegExp("\\b(?:" + words.join("|") + ")\\b", "gi");
 
 module.exports = function (robot) {
 
@@ -103,9 +103,10 @@ module.exports = function (robot) {
     ///////////////
     robot.hear(regex, function (res) {
         let userData = UserStore.forUser(robot, res.message.user.id);
-        let currentDebt = incrementCredits(userData);
+        let currentDebt = incrementCredits(userData, res.match.length);
 
         let response = phrase.replace(/{user}/, res.message.user.name)
+            .replace(/{amount}/, res.match.length)
             .replace(/{credit}/, currentDebt);
         res.send(response);
     });

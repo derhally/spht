@@ -27,16 +27,16 @@ describe('profanity', function () {
         beforeEach(function () {
             return co(function* () {
                 yield this.room.user.say('bob', 'ass');
-                yield this.room.user.say('bob', 'ass');
+                yield this.room.user.say('bob', 'ass shit');
             }.bind(this));
         });
 
         it('should reply to user', function () {
             expect(this.room.messages).to.eql([
                 ['bob', 'ass'],
-                ['hubot', '*bob* you have been fined one credit for a violation of the verbal morality statute.\n Your profanity has cost you *1* credits up to this point.'],
-                ['bob', 'ass'],
-                ['hubot', '*bob* you have been fined one credit for a violation of the verbal morality statute.\n Your profanity has cost you *2* credits up to this point.']
+                ['hubot', '*bob* you have been fined 1 credit for a violation of the verbal morality statute.\n Your profanity has cost you *1* credits up to this point.'],
+                ['bob', 'ass shit'],
+                ['hubot', '*bob* you have been fined 2 credit for a violation of the verbal morality statute.\n Your profanity has cost you *3* credits up to this point.']
             ]);
         });
     });
