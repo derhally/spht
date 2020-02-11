@@ -11,6 +11,13 @@
 //   boobs
 //
 
+words = [
+  'boob(?:s|ies)?',
+  'tit(?:s)?',
+  'tata(?:s)?',
+  'bazongas?',
+]
+
 const RESPONSES = [
   "/shakes his assets at <u>",
   ":boobs:",
@@ -20,13 +27,20 @@ const RESPONSES = [
 ]
 
 module.exports = function (robot) {
-  robot.hear(/(boob(s?|ies?)|tit(s?)|tata(s?)|bazongas)/i, function (msg) {
-    const phrase = msg.random(RESPONSES)
-    response = phrase.replace(/<u>/g, () => msg.message.user.name)
+
+  const regex = new RegExp("\\b(?:" + words.join("|") + ")\\b", "gi");
+
+  ///////////////
+  // LISTENERS //
+  ///////////////
+  robot.hear(regex, function (res) {
+
+    const phrase = res.random(RESPONSES)
+    let response = phrase.replace(/<u>/g, () => res.message.user.name)
 
     if (response.startsWith("/"))
-      msg.emote(response.slice(1));
+      res.emote(response.slice(1));
     else
-      msg.send(response);
+      res.send(response);
   });
 }
