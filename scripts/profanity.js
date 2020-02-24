@@ -98,6 +98,22 @@ module.exports = function (robot) {
         }
     }
 
+    const ordinal_rules = new Intl.PluralRules("en", {
+        type: "ordinal"
+    });
+
+    const suffixes = {
+        one: "st",
+        two: "nd",
+        few: "rd",
+        other: "th"
+    };
+
+    function ordinal(number) {
+        const suffix = suffixes[ordinal_rules.select(number)];
+        return (number + suffix);
+    }
+
     ///////////////
     // LISTENERS //
     ///////////////
@@ -135,9 +151,9 @@ module.exports = function (robot) {
         let respMsg = `The top ${topCount} offenders are:` +
             "\n```" + table(topXOffenders, table_config) + "```";
 
-        if (userPos >= topCount)
-            respMsg += "\n" + `${res.message.user.name}, you are in ${userPos + 1}th position`;
-
+        if (userPos >= topCount) {
+            respMsg += "\n" + `${res.message.user.name}, you are in ${ordinal(userPos + 1)} position`;
+        }
         res.send(respMsg);
     });
 }

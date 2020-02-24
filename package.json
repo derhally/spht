@@ -8,6 +8,7 @@
         "autotest": "mocha test -w"
     },
     "dependencies": {
+        "full-icu": "^1.3.0",
         "hubot": "^2.13.0 < 2.14.0",
         "table": "^5.4.6"
     },
