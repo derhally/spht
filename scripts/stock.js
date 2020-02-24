@@ -8,7 +8,7 @@
 //   ALPHA_KEY
 //
 // Commands:
-//   !stock <ticket>  - Get the quote for a stock
+//   !stock <ticker>  - Get the quote for a stock
 //
 
 module.exports = function (robot) {
@@ -19,9 +19,9 @@ module.exports = function (robot) {
 
     function changeSymbol(change) {
         if (change == "-")
-            return "↓"
+            return "▼"
         else
-            return "↑";
+            return "▲";
     }
 
     function trimNumber(number, decimals) {
@@ -35,9 +35,9 @@ module.exports = function (robot) {
 
     function format(data) {
         let current = `${data.symbol}: ${trimNumber(data.price, 2)}${changeSymbol(data.change_percent[0])} (${trimNumber(data.change, 2)}|${trimNumber(data.change_percent.slice(0, -1), 2)}%)`;
-        let o = `     O: ${trimNumber(data.open, 2)}`;
-        let h = `     H: ${trimNumber(data.high, 2)}`;
-        let l = `     L: ${trimNumber(data.low, 2)}`;
+        let o = ` O: ${trimNumber(data.open, 2)}`;
+        let h = ` H: ${trimNumber(data.high, 2)}`;
+        let l = ` L: ${trimNumber(data.low, 2)}`;
 
         return current + "\n" + o + "\n" + h + "\n" + l;
     }
