@@ -5,6 +5,7 @@
   "author": "Marathon",
   "description": "Spht!",
   "dependencies": {
+    "alphavantage": "^1.2.6",
     "hubot": "^3.3.2",
     "hubot-azure-brain": "^1.0.0",
     "hubot-diagnostics": "^1.0.0",

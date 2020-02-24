@@ -1,3 +1,16 @@
+// Description:
+//   Stock script for displaing a quote
+//
+// Dependencies:
+//   None
+//
+// Configuration:
+//   ALPHA_KEY
+//
+// Commands:
+//   !stock <ticket>  - Get the quote for a stock
+//
+
 module.exports = function (robot) {
 
     const alpha = require('alphavantage')({
