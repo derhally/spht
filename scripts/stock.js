@@ -18,12 +18,10 @@ module.exports = function (robot) {
     });
 
     function changeSymbol(change) {
-        if (change == "+")
-            return "↑";
-        else if (change == "-")
+        if (change == "-")
             return "↓"
         else
-            return "";
+            return "↑";
     }
 
     function trimNumber(number, decimals) {
@@ -36,7 +34,7 @@ module.exports = function (robot) {
     }
 
     function format(data) {
-        let current = `${data.symbol}: ${data.price}${changeSymbol(data.change_percent[0])} (${trimNumber(data.change, 2)}|${trimNumber(data.change_percent.slice(0, -1), 2)}%)`;
+        let current = `${data.symbol}: ${trimNumber(data.price, 2)}${changeSymbol(data.change_percent[0])} (${trimNumber(data.change, 2)}|${trimNumber(data.change_percent.slice(0, -1), 2)}%)`;
         let o = `     O: ${trimNumber(data.open, 2)}`;
         let h = `     H: ${trimNumber(data.high, 2)}`;
         let l = `     L: ${trimNumber(data.low, 2)}`;
