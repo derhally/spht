@@ -8,6 +8,7 @@
         "autotest": "mocha test -w"
     },
     "dependencies": {
+        "alphavantage": "^1.2.6",
         "full-icu": "^1.3.0",
         "hubot": "^2.13.0 < 2.14.0",
         "table": "^5.4.6"
@@ -15,11 +16,12 @@
     "devDependencies": {
         "chai": "latest",
         "co": "latest",
-        "mocha": "latest",
         "coffee-script": "latest",
-        "semantic-release": "latest",
+        "cross-env": "^7.0.0",
+        "hubot-test-helper": "latest",
+        "mocha": "latest",
         "nock": "latest",
-        "hubot-test-helper": "latest"
+        "semantic-release": "latest"
     },
     "keywords": [
         "testing",
