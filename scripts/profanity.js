@@ -135,7 +135,7 @@ module.exports = function (robot) {
         let respMsg = `The top ${topCount} offenders are:` +
             "\n```" + table(topXOffenders, table_config) + "```";
 
-        if (userPos >= 5)
+        if (userPos >= topCount)
             respMsg += "\n" + `${res.message.user.name}, you are in ${userPos + 1}th position`;
 
         res.send(respMsg);
