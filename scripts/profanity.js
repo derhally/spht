@@ -111,10 +111,11 @@ module.exports = function (robot) {
         res.send(response);
     });
 
-    robot.respond(/top offenders/i, function (res) {
+    robot.respond(/top (\d+?)?(?:\s)?offenders/i, function (res) {
 
-        offenders = []
+        let offenders = [];
 
+        var topCount = res.match[1] === undefined ? 5 : res.match[1];
         const users = robot.brain.users();
         for (let key of Object.keys(users)) {
             const user = users[key];
@@ -124,7 +125,19 @@ module.exports = function (robot) {
         }
 
         offenders.sort(compare);
-        offenders.unshift(['Offender', 'Credits']);
-        res.send('```' + table(offenders, table_config) + '```');
+        let userPos = offenders.findIndex(data => {
+            return data[0] === res.message.user.name
+        })
+
+        let topXOffenders = offenders.slice(0, topCount)
+        topXOffenders.unshift(['Offender', 'Credits']);
+
+        let respMsg = `The top ${topCount} offenders are:` +
+            "\n```" + table(topXOffenders, table_config) + "```";
+
+        if (userPos >= 5)
+            respMsg += "\n" + `${res.message.user.name}, you are in ${userPos + 1}th position`;
+
+        res.send(respMsg);
     });
 }

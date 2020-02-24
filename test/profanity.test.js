@@ -53,17 +53,37 @@ describe('profanity', function () {
                 this.user3 = this.room.robot.brain.userForId('tom', {
                     name: 'tom'
                 })
+                this.user4 = this.room.robot.brain.userForId('joe', {
+                    name: 'joe'
+                })
+                this.user5 = this.room.robot.brain.userForId('bert', {
+                    name: 'bert'
+                })
+                this.user6 = this.room.robot.brain.userForId('peter', {
+                    name: 'peter'
+                })
 
                 var userData = UserStore.forUser(this.room.robot, 'bob');
-                userData.profanity_debt = 3;
+                userData.profanity_debt = 6;
 
                 userData = UserStore.forUser(this.room.robot, 'tom');
                 userData.profanity_debt = 10;
 
                 userData = UserStore.forUser(this.room.robot, 'alice');
+                userData.profanity_debt = 4;
+
+                userData = UserStore.forUser(this.room.robot, 'bert');
+                userData.profanity_debt = 1;
+
+                userData = UserStore.forUser(this.room.robot, 'peter');
+                userData.profanity_debt = 2;
+
+                userData = UserStore.forUser(this.room.robot, 'joe');
                 userData.profanity_debt = 1;
 
                 yield this.room.user.say('bob', 'hubot top offenders');
+                yield this.room.user.say('bert', 'hubot top offenders');
+                yield this.room.user.say('bob', 'hubot top 3 offenders');
             }.bind(this));
         });
 
@@ -84,15 +104,28 @@ describe('profanity', function () {
         expectedResponse = table([
             ['Offender', 'Credits'],
             ['tom', 10],
-            ['bob', 3],
-            ['alice', '1']
+            ['bob', 6],
+            ['alice', 4],
+            ['peter', 2],
+            ['joe', 1]
+        ], tableConfig);
+
+        expectedTop3Response = table([
+            ['Offender', 'Credits'],
+            ['tom', 10],
+            ['bob', 6],
+            ['alice', 4]
         ], tableConfig);
 
         it('should reply to user', function () {
 
             expect(this.room.messages).to.eql([
                 ['bob', 'hubot top offenders'],
-                ['hubot', '```' + expectedResponse + '```']
+                ['hubot', "The top 5 offenders are:\n```" + expectedResponse + "```"],
+                ['bert', 'hubot top offenders'],
+                ['hubot', "The top 5 offenders are:\n```" + expectedResponse + "```\nbert, you are in 6th position"],
+                ['bob', 'hubot top 3 offenders'],
+                ['hubot', "The top 3 offenders are:\n```" + expectedTop3Response + "```"]
             ]);
         });
     });
