@@ -44,12 +44,16 @@ module.exports = function (robot) {
 
     robot.hear(/^!stock (.*)$/i, function (res) {
         res.finish();
+        let ticker = res.match[1].trim();
 
-        alpha.data.quote(res.match[1].trim())
+        alpha.data.quote(ticker)
             .then(data => {
                 const polished = alpha.util.polish(data);
                 var response = format(polished.data);
                 res.send(response);
+            })
+            .catch(error => {
+                res.send(`Error looking up ticker '${ticker}.`)
             });
     });
 }
