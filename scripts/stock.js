@@ -37,9 +37,9 @@ module.exports = function (robot) {
 
     function format(data) {
         let current = `${data.symbol}: ${data.price}${changeSymbol(data.change_percent[0])} (${trimNumber(data.change, 2)}|${trimNumber(data.change_percent.slice(0, -1), 2)}%)`;
-        let o = `     o: ${trimNumber(data.open)}`;
-        let h = `     h: ${trimNumber(data.high)}`;
-        let l = `     l: ${trimNumber(data.low)}`;
+        let o = `     O: ${trimNumber(data.open, 2)}`;
+        let h = `     H: ${trimNumber(data.high, 2)}`;
+        let l = `     L: ${trimNumber(data.low, 2)}`;
 
         return current + "\n" + o + "\n" + h + "\n" + l;
     }
