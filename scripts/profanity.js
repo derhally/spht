@@ -118,6 +118,9 @@ module.exports = function (robot) {
     // LISTENERS //
     ///////////////
     robot.hear(regex, function (res) {
+
+        return;
+
         let userData = UserStore.forUser(robot, res.message.user.id);
         let currentDebt = incrementCredits(userData, res.match.length);
 
