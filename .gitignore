@@ -1,14 +1,11 @@
-node_modules/
-
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-lerna-debug.log*
 
 .env
 .env.test
+.venv
+.vscode
 
+__pycache__/
+*.py[cod]
+*$py.class
 
-.npm
-
-.yarn-integrity
+dist
