@@ -1,19 +1,10 @@
-FROM node:13.7.0
+FROM python:3.8-slim-buster
 
-RUN npm install -g coffeescript && \
-    useradd hubot -m
+WORKDIR /app
 
-WORKDIR /home/hubot
+COPY requirements.txt ./
+RUN pip3 install -r requirements.txt
 
-ADD ./hubot/ /home/hubot/
-COPY ./scripts/ /home/hubot/scripts/
+COPY bot/. /app
 
-RUN npm install
-RUN chown -R hubot:hubot /home/hubot
-RUN chmod +x /home/hubot/bin/hubot
-
-USER hubot
-
-ENV ROCKETCHAT_USESSL=true
-
-CMD bin/hubot -n $BOT_NAME -a rocketchat
+CMD ["python", "./main.py" ]
