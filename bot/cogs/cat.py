@@ -1,4 +1,5 @@
 import asyncio
+import config
 import discord
 from discord.ext import commands
 import os
@@ -271,12 +272,11 @@ class CatFacts(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        self.image_url = os.getenv("CAT_IMAGE_URL")
 
     @commands.command(name="cat", aliases=["catfact"])
     async def catfact(self, ctx):
         fact = random.choice(CAT_FACTS)
-        img = f"{self.image_url}/cat{random.randint(1,4):02d}.png"
+        img = f"{config.cat_images_url}/{random.randint(1,4):02d}.png"
         embed = discord.Embed(title="Cat Fact", description=fact, color=discord.Colour.blurple())
         embed.set_thumbnail(url=img)
         await ctx.send(embed=embed)

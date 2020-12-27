@@ -1,5 +1,6 @@
 import aiohttp
 import asyncio
+import config
 import datetime
 import discord
 from discord.ext import commands
@@ -7,9 +8,10 @@ from dotmap import DotMap
 import json
 import os
 
-DAYS=["Mon","Tues","Wed","Thur","Fri","Sat","Sun"]
-
 class Weather(commands.Cog):
+
+    DAYS=["Mon","Tues","Wed","Thur","Fri","Sat","Sun"]
+
     def __init__(self, bot, url, api_key):
         self.bot = bot
         self.root_url = url
@@ -21,29 +23,45 @@ class Weather(commands.Cog):
 
     @staticmethod
     def get_emote_for_code(code):
+        # thunder
         if code >= 200 and code < 300:
-          return ":thunder_cloud_rain:"
+          return "🌩" 
 
+        # drizzle
         if code >= 300 and code < 400:
-            return ":cloud_rain:"
+            return "💦"
 
+        # rain
         if code >= 500 and code < 600:
-            return ":cloud_rain:"
+            return "🌧"
 
+        # snow
         if code >= 600 and code < 700:
-            return ":snowflake:"
+            return "❄"
 
+        # smoke
+        if code == 711:
+            return "🌁"
+
+        # fog
+        if code == 762:
+            return "🌁"
+
+        # volcano
         if code == 762:
             return ":volcano:"
 
+        # tornado
         if code == 781:
-            return ":cloud_tornado:"
+            return "🌪"
 
+        # clear
         if code == 800:
-            return ":sunny:"
+            return "☀"
 
+        # cloudy
         if code >= 801 and code < 805:
-            return ":cloud:"
+            return "☁"
 
         return ""
 
@@ -75,13 +93,14 @@ class Weather(commands.Cog):
     def render_forecast(data):
         title = f"{data.cnt} day forecast for {data.city.name}"
         embed = discord.Embed(title=title)
+        embed.set_thumbnail(url=f"{config.images_url}/weather.png")
         for entry in data.list:
             dt = datetime.datetime.fromtimestamp(entry.dt)
             low = f"{round(entry.temp.min)}f"
             high = f"{round(entry.temp.max)}f"
             humidity = f"{entry.humidity}%"
-            desc = entry.weather[0].main
-            embed.add_field(name=f"{DAYS[dt.weekday()]}: {dt.month}/{dt.day}", value=f"Cond: {desc}\nLow: {low}\nHigh: {high}\nHumidity: {humidity}")
+            desc = f"{Weather.get_emote_for_code(entry.weather[0].id)} {entry.weather[0].main}"
+            embed.add_field(name=f"{Weather.DAYS[dt.weekday()]}: {dt.month}/{dt.day}", value=f"{desc}\nLow: {low}\nHigh: {high}\nHumidity: {humidity}")
         return embed
 
     @commands.command(name="weather")
