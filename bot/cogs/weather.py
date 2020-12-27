@@ -55,13 +55,15 @@ class Weather(commands.Cog):
     async def fetch_data(url, headers, params):
         async with aiohttp.ClientSession() as session:
             async with session.get(url, headers=headers, params=params) as response:
-                return DotMap(json.loads(await response.text()))
+                content = await response.text()
+                return DotMap(json.loads(content))
 
     @staticmethod
     def render_current(data):
         title = f"Current weather for {data.name}"
         description = f"{Weather.get_emote_for_code(data.weather[0].id)} {Weather.getDescription(data.weather[0])}"
         embed = discord.Embed(title=title, description=description)
+        embed.set_thumbnail(url=f"http://openweathermap.org/img/w/{data.weather[0].icon}.png")
         embed.add_field(name="Current", value=f"{round(data.main.temp)}f", inline=True)
         embed.add_field(name="Feels like", value=f"{round(data['main']['feels_like'])}f", inline=True)
         embed.add_field(name="Humidity", value=f"{data.main.humidity}%", inline=True)
@@ -78,10 +80,11 @@ class Weather(commands.Cog):
             low = f"{round(entry.temp.min)}f"
             high = f"{round(entry.temp.max)}f"
             humidity = f"{entry.humidity}%"
-            embed.add_field(name=f"{DAYS[dt.weekday()]}: {dt.month}/{dt.day}", value=f"Low: {low}\nHigh: {high}\nHumidity: {humidity}")
+            desc = entry.weather[0].main
+            embed.add_field(name=f"{DAYS[dt.weekday()]}: {dt.month}/{dt.day}", value=f"Cond: {desc}\nLow: {low}\nHigh: {high}\nHumidity: {humidity}")
         return embed
 
-    @commands.command(name='weather')
+    @commands.command(name="weather")
     async def get_weather(self, ctx, *, location:str):
         url = self.root_url + "/weather"
         params = {"units": "imperial"}
@@ -99,7 +102,7 @@ class Weather(commands.Cog):
             msg = data.message.capitalize()
             await ctx.send(msg)
 
-    @commands.command(name='forecast')
+    @commands.command(name="forecast")
     async def get_forecast(self, ctx, *, location:str):
         url = self.root_url + "/forecast/daily"
         params = {"units": "imperial"}
@@ -110,7 +113,7 @@ class Weather(commands.Cog):
             params["q"] = location
 
         data = await self.fetch_data(url, self.headers, params)
-        if data.cod == '200':
+        if data.cod == "200":
             msg = Weather.render_forecast(data)
             await ctx.send(embed=msg)
         else:
