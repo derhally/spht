@@ -1,8 +1,16 @@
 from bot import Bot
 import os
 
-modules = ["modules.bonghit", "modules.weather", "modules.stocks"]
+modules = [
+    "cogs.bonghit", 
+    "cogs.cat", 
+    "cogs.crypto", 
+    "cogs.info", 
+    "cogs.stocks", 
+    "cogs.weather",
+]
 
 token = os.getenv("BOT_TOKEN")
-client = Bot(token=token, command_prefix="!", modules=modules)
+prefix = os.getenv("BOT_COMMAND_PREFIX")
+client = Bot(token=token, command_prefix=prefix, modules=modules)
 client.run(token)
