@@ -269,15 +269,16 @@ CAT_FACTS = [
 
 
 class CatFacts(commands.Cog):
-
     def __init__(self, bot):
         self.bot = bot
+
+    CAT_CHARS = ["🐱", "😺", "😼", "😹", "🙀", "😸", "😽"]
 
     @commands.command(name="cat", aliases=["catfact"])
     async def catfact(self, ctx):
         fact = random.choice(CAT_FACTS)
         img = f"{config.cat_images_url}/{random.randint(1,4):02d}.png"
-        embed = discord.Embed(title="Cat Fact", description=fact, color=discord.Colour.blurple())
+        embed = discord.Embed(title=f"{random.choice(CatFacts.CAT_CHARS)} Cat Fact", description=fact, color=discord.Colour.blurple())
         embed.set_thumbnail(url=img)
         await ctx.send(embed=embed)
 
