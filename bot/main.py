@@ -6,6 +6,7 @@ modules = [
     "cogs.cat", 
     "cogs.crypto", 
     "cogs.info", 
+    "cogs.settings",
     "cogs.stocks", 
     "cogs.weather",
 ]

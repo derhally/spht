@@ -1,5 +1,6 @@
 
 import asyncio
+import config
 import discord
 from discord.ext import commands
 from yahoo_fin import stock_info
@@ -60,7 +61,7 @@ class Stocks(commands.Cog):
 
     @staticmethod
     def render(quote: StockQuote):
-        c = f"{quote.ticker}: {quote.current:.2f}{Stocks.changeSymbol(quote.change)} ({quote.change:.2f}|{quote.change_percent:.2f}%)"
+        c = f"Price: {quote.current:.2f}{Stocks.changeSymbol(quote.change)} ({quote.change:.2f}|{quote.change_percent:.2f}%)"
         p = f"\tPrevious Close: {quote.previous:.2f}"
         o = f"\tOpen: {quote.open:.2f}"
         h = f"\tDay's Range: {quote.day_range}"
@@ -68,6 +69,7 @@ class Stocks(commands.Cog):
         title = quote.ticker
         description = c + "\n" + o + "\n" + h + "\n"
         embed = discord.Embed(title=title, description=description)
+        embed.set_thumbnail(url=config.image_url("stock-market.png"))
         return embed
 
     @staticmethod

@@ -1,4 +1,5 @@
 import aiohttp
+import argparse
 import asyncio
 import config
 import datetime
@@ -6,11 +7,14 @@ import discord
 from discord.ext import commands
 from dotmap import DotMap
 import json
+from cogs.settings import SettingsKey
 import os
 
+@SettingsKey(key="weather")
 class Weather(commands.Cog):
-
     DAYS=["Mon","Tues","Wed","Thur","Fri","Sat","Sun"]
+
+    LOC_SETTING_KEY = "weather.location"
 
     def __init__(self, bot, url, api_key):
         self.bot = bot
@@ -93,7 +97,7 @@ class Weather(commands.Cog):
     def render_forecast(data):
         title = f"{data.cnt} day forecast for {data.city.name}"
         embed = discord.Embed(title=title)
-        embed.set_thumbnail(url=f"{config.images_url}/weather.png")
+        embed.set_thumbnail(url=config.image_url("weather.png"))
         for entry in data.list:
             dt = datetime.datetime.fromtimestamp(entry.dt)
             low = f"{round(entry.temp.min)}f"
@@ -103,8 +107,24 @@ class Weather(commands.Cog):
             embed.add_field(name=f"{Weather.DAYS[dt.weekday()]}: {dt.month}/{dt.day}", value=f"{desc}\nLow: {low}\nHigh: {high}\nHumidity: {humidity}")
         return embed
 
+    def _get_location(self, ctx, *args):
+        if len(args) == 0:
+            location = self.bot.storage.get(self.LOC_SETTING_KEY, ctx.message.author.id)
+        else:
+            location = "".join(args)
+        return location
+
+    def _get_no_location_msg(self):
+        return ("You must specify a location or set your default location using the command: "
+            f"```{self.bot.command_prefix}settting weather location <zip>|<city name>```")
+
     @commands.command(name="weather")
-    async def get_weather(self, ctx, *, location:str):
+    async def get_weather(self, ctx, *args):
+        location = self._get_location(ctx, *args)
+        if not location:
+            await ctx.send(self._get_no_location_msg())
+            return
+
         url = self.root_url + "/weather"
         params = {"units": "imperial"}
 
@@ -122,7 +142,12 @@ class Weather(commands.Cog):
             await ctx.send(msg)
 
     @commands.command(name="forecast")
-    async def get_forecast(self, ctx, *, location:str):
+    async def get_forecast(self, ctx, *args):
+        location = self._get_location(ctx, args)
+        if not location:
+            await ctx.send(self._get_no_location_msg())
+            return
+
         url = self.root_url + "/forecast/daily"
         params = {"units": "imperial"}
 
@@ -138,6 +163,18 @@ class Weather(commands.Cog):
         else:
             msg = data.message.capitalize()
             await ctx.send(msg)
+
+    async def save_user_pref(self, ctx, args:list):
+        parser = argparse.ArgumentParser()
+        subs = parser.add_subparsers()
+        loc = subs.add_parser("location", aliases=["loc"])
+        loc.add_argument("location", nargs="*")
+        pargs = parser.parse_args(args)
+
+        if pargs.location:
+            value = " ".join(pargs.location)
+            self.bot.storage.set(self.LOC_SETTING_KEY, value, user_id=ctx.message.author.id)
+            await ctx.message.author.send(f"Your default weather location was saved as `{value}`.")
 
 def setup(bot):
     url = os.getenv("WEATHER_API_URL")
