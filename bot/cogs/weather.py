@@ -143,7 +143,7 @@ class Weather(commands.Cog):
 
     @commands.command(name="forecast")
     async def get_forecast(self, ctx, *args):
-        location = self._get_location(ctx, args)
+        location = self._get_location(ctx, *args)
         if not location:
             await ctx.send(self._get_no_location_msg())
             return
