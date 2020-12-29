@@ -2,11 +2,11 @@ from bot import Bot
 import os
 
 modules = [
+    "cogs.settings",
     "cogs.bonghit", 
     "cogs.cat", 
     "cogs.crypto", 
     "cogs.info", 
-    "cogs.settings",
     "cogs.stocks", 
     "cogs.weather",
 ]

@@ -28,8 +28,8 @@ class Info(commands.Cog):
         await ctx.send(embed=embed)
     
     @commands.guild_only()
-    @commands.command(aliases=["guildinfo"])
-    async def serverinfo(self, ctx):
+    @commands.command()
+    async def guildinfo(self, ctx):
         """Gives information of the guild the command was run on."""
         guild = ctx.guild
         roles = [role for role in guild.roles]

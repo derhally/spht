@@ -21,9 +21,12 @@ class Settings(commands.Cog):
     @commands.command(hidden=True)
     async def setting(self, ctx, *, msg):
         args = shlex.split(msg)
-        cog = settings_to_cogs[args[0].lower()]
-        cog = self.bot.get_cog(cog)
-        await cog.save_user_pref(ctx, args[1:])
+        setting_category = args[0].lower()
+        if setting_category in settings_to_cogs:
+            cog = settings_to_cogs[setting_category]
+            cog = self.bot.get_cog(cog)
+            if cog:
+                await cog.save_user_pref(ctx, args[0], args[1:])
 
 def setup(bot):
     bot.add_cog(Settings(bot))

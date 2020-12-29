@@ -164,16 +164,21 @@ class Weather(commands.Cog):
             msg = data.message.capitalize()
             await ctx.send(msg)
 
-    async def save_user_pref(self, ctx, args:list):
+    async def save_user_pref(self, ctx, command, args:list):
         parser = argparse.ArgumentParser()
         subs = parser.add_subparsers()
         loc = subs.add_parser("location", aliases=["loc"])
         loc.add_argument("location", nargs="*")
-        pargs = parser.parse_args(args)
+
+        try:
+            pargs = parser.parse_args(args)
+        except SystemExit:
+            await ctx.message.author.send(f"Error: valid options are location or loc")
+            return
 
         if pargs.location:
             value = " ".join(pargs.location)
-            self.bot.storage.set(self.LOC_SETTING_KEY, value, user_id=ctx.message.author.id)
+            self.bot.storage.set(Weather.LOC_SETTING_KEY, value, user_id=ctx.message.author.id)
             await ctx.message.author.send(f"Your default weather location was saved as `{value}`.")
 
 def setup(bot):
