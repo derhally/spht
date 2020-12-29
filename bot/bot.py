@@ -1,5 +1,7 @@
+import config
 import discord
 from discord.ext import commands
+import storage
 import sys
 
 class Bot(commands.Bot):
@@ -7,6 +9,8 @@ class Bot(commands.Bot):
     def __init__(self, token, command_prefix, modules):
         commands.Bot.__init__(self, command_prefix=command_prefix)
         self.modules = modules
+        self.storage = storage.Storage()
+        self.owner_id = config.bot_owner
         self.load()
         self.run(token, bot=True, reconnect=True)
 

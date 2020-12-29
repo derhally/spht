@@ -2,6 +2,7 @@ from bot import Bot
 import os
 
 modules = [
+    "cogs.settings",
     "cogs.bonghit", 
     "cogs.cat", 
     "cogs.crypto", 
