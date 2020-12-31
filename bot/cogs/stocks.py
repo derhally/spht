@@ -101,24 +101,25 @@ class Stocks(commands.Cog):
 
     @commands.command(name="stocks")
     async def stocks(self, ctx):
-        stocks = self.bot.storage.get(Stocks.STOCKS_SETTINGS_KEY, ctx.message.author.id)
-        if not stocks or len(stocks) == 0:
-            await ctx.send("You have not set your `stocks` setting.  Use the command: "
-            f"```{self.bot.command_prefix}setting stocks set|add <ticker> <ticker>```")
-            return
+        async with ctx.typing():
+            stocks = self.bot.storage.get(Stocks.STOCKS_SETTINGS_KEY, ctx.message.author.id)
+            if not stocks or len(stocks) == 0:
+                await ctx.send("You have not set your `stocks` setting.  Use the command: "
+                f"```{self.bot.command_prefix}setting stocks set|add <ticker> <ticker>```")
+                return
 
-        quotes = []
-        with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
-            future_stock = {executor.submit(Stocks.get, ticker): ticker for ticker in stocks}
-            for stock in concurrent.futures.as_completed(future_stock):
-                res = stock.result()
-                if res:
-                    quotes.append(res)
+            quotes = []
+            with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
+                future_stock = {executor.submit(Stocks.get, ticker): ticker for ticker in stocks}
+                for stock in concurrent.futures.as_completed(future_stock):
+                    res = stock.result()
+                    if res:
+                        quotes.append(res)
 
-        # sort them as the original
-        quotes = sorted(quotes, key=lambda x: stocks.index(x.ticker))
-        response = Stocks.render(quotes)
-        await ctx.send(embed=response)
+            # sort them as the original
+            quotes = sorted(quotes, key=lambda x: stocks.index(x.ticker))
+            response = Stocks.render(quotes)
+            await ctx.send(embed=response)
 
     async def save_user_pref(self, ctx, command, args:list):
         parser = argparse.ArgumentParser()

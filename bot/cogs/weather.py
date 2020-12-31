@@ -116,7 +116,7 @@ class Weather(commands.Cog):
 
     def _get_no_location_msg(self):
         return ("You must specify a location or set your default location using the command: "
-            f"```{self.bot.command_prefix}settting weather location <zip>|<city name>```")
+            f"```{self.bot.command_prefix}setting weather location <zip>|<city name>```")
 
     @commands.command(name="weather")
     async def get_weather(self, ctx, *args):
