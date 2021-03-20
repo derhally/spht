@@ -1,8 +1,16 @@
 steps:
 - name: 'gcr.io/cloud-builders/docker'
-  args: [ 'build', '-t', '$_IMAGE_REPO', '.' ]
+  entrypoint: 'bash'
+  args: ['-c', 'docker login --username=$_DH_USERNAME --password=$$PASSWORD']
+  secretEnv: ['PASSWORD']
+- name: 'gcr.io/cloud-builders/docker'
+  args: [ 'build', '-t', '$_IMAGE_REPO', '--label', 'COMMIT_IT=$SHORT_SHA', '.' ]
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', '$_IMAGE_REPO']
 - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
   entrypoint: gcloud
   args: ['beta', 'compute', 'instances', 'update-container', '$_INSTANCE', '--zone', '$_ZONE']
-
-images: ['$_IMAGE_REPO']
+availableSecrets:
+   secretManager:
+   - versionName: projects/$PROJECT_NUMBER/secrets/$_DOCKER_PASSWORD_SECRET_NAME/versions/$_DH_SECRET_VERSION
+     env: 'PASSWORD'
