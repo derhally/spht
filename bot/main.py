@@ -11,6 +11,7 @@ modules = [
     "cogs.info",
     "cogs.stocks",
     "cogs.weather",
+    "cogs.wolfram"
 ]
 
 token = os.getenv("BOT_TOKEN")
