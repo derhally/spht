@@ -1,13 +1,15 @@
 from bot import Bot
 import os
+import sys
+
 
 modules = [
     "cogs.settings",
-    "cogs.bonghit", 
-    "cogs.cat", 
-    "cogs.crypto", 
-    "cogs.info", 
-    "cogs.stocks", 
+    "cogs.bonghit",
+    "cogs.cat",
+    "cogs.crypto",
+    "cogs.info",
+    "cogs.stocks",
     "cogs.weather",
 ]
 
