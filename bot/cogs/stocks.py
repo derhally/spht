@@ -1,13 +1,15 @@
 
-import asyncio
 import argparse
-from cogs.settings import SettingsKey
+import asyncio
 import concurrent.futures
+import logging
+
 import config
 import discord
 from discord.ext import commands
-import logging
 from yahoo_fin import stock_info
+
+from cogs.settings import SettingsKey
 
 
 class StockQuote:

@@ -1,7 +1,8 @@
 import asyncio
+import shlex
+
 import discord
 from discord.ext import commands
-import shlex
 
 settings_to_cogs = {}
 

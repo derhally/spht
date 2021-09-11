@@ -1,8 +1,9 @@
 
 import asyncio
+import random
+
 import discord
 from discord.ext import commands
-import random
 
 BONG_TIME = [10,5,3]
 BONG_PHRASE = [
