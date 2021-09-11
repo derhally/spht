@@ -33,7 +33,7 @@ class Crypto(commands.Cog):
     def __init__(self, bot, client):
         self.bot = bot
         self.client = client
-        default_symbols = "BTC,ETH,ADA,DOGE,BCH,BNB,USDT"
+        self.default_symbols = "BTC,ETH,ADA,DOGE,BCH,BNB,USDT"
 
     @staticmethod
     def changeSymbol(change):
