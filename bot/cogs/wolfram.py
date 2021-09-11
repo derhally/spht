@@ -1,11 +1,12 @@
 
 import asyncio
-import config
-import discord
-from discord.ext import commands
 import logging
 import os
+
+import config
+import discord
 import wolframalpha
+from discord.ext import commands
 
 
 class Wolfram(commands.Cog):

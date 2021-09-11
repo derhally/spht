@@ -1,11 +1,13 @@
-import aiohttp
 import asyncio
-import config
-import discord
-from discord.ext import commands
 import os
 import random
+
+import aiohttp
+import config
+import discord
 import requests
+from discord.ext import commands
+
 
 class CatFacts(commands.Cog):
     def __init__(self, bot):

@@ -1,14 +1,17 @@
-import aiohttp
 import argparse
 import asyncio
-import config
 import datetime
+import json
+import os
+
+import aiohttp
+import config
 import discord
 from discord.ext import commands
 from dotmap import DotMap
-import json
+
 from cogs.settings import SettingsKey
-import os
+
 
 @SettingsKey(key="weather")
 class Weather(commands.Cog):
