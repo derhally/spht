@@ -47,7 +47,7 @@ class Crypto(commands.Cog):
     @staticmethod
     def render(quotes: list) -> discord.Embed:
         embed = discord.Embed(title="Crypto")
-        embed.set_thumbnail(url=config.image_url("stock-market.png"))
+        embed.set_thumbnail(url=config.image_url("crypto.png"))
 
         for quote in quotes:
             title = f"{quote.symbol}-{quote.name}"
